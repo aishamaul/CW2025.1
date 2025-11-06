@@ -6,8 +6,8 @@ public class GameController implements InputEventListener {
 
     private final GuiController viewGuiController;
 
-    public GameController(GuiController c) {
-        viewGuiController = c;
+    public GameController(GuiController guiController) {
+        viewGuiController = guiController;
         board.createNewBrick();
         viewGuiController.setEventListener(this);
         viewGuiController.initGameView(board.getBoardMatrix(), board.getViewData());
