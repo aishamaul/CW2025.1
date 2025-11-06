@@ -28,6 +28,12 @@ public class GameController implements InputEventListener {
         return clearRow;
     }
 
+    private void userScore(MoveEvent event){
+        if (event.getEventSource() == EventSource.USER) {
+            board.getScore().add(1);
+        }
+    }
+
 
     @Override
     public DownData onDownEvent(MoveEvent event) {
