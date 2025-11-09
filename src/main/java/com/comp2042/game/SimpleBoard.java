@@ -7,6 +7,7 @@ import com.comp2042.model.ClearRow;
 import com.comp2042.model.NextShapeInfo;
 import com.comp2042.model.ViewData;
 import com.comp2042.util.MatrixOperations;
+import com.comp2042.util.RowClearer;
 
 import java.awt.*;
 
@@ -19,6 +20,7 @@ public class SimpleBoard implements Board {
     private int[][] currentGameMatrix;
     private Point currentOffset;
     private final Score score;
+    private final RowClearer rowClearer;
 
     public SimpleBoard(int width, int height) {
         this.width = width;
@@ -27,6 +29,7 @@ public class SimpleBoard implements Board {
         brickGenerator = new RandomBrickGenerator();
         brickRotator = new BrickRotator();
         score = new Score();
+        this.rowClearer = new RowClearer();
     }
 
     @Override
@@ -110,7 +113,7 @@ public class SimpleBoard implements Board {
 
     @Override
     public ClearRow clearRows() {
-        ClearRow clearRow = MatrixOperations.checkRemoving(currentGameMatrix);
+        ClearRow clearRow = rowClearer.checkRemoving(currentGameMatrix);
         currentGameMatrix = clearRow.getNewMatrix();
         return clearRow;
 
