@@ -45,8 +45,8 @@ public class GameRenderer {
     }
 
     public void refreshBrick(ViewData brick) {
-        brickPanel.setLayoutX(gamePanel.getLayoutX() + brick.getxPosition() * brickPanel.getVgap() + brick.getxPosition() * BRICK_SIZE);
-        brickPanel.setLayoutY(-42 + gamePanel.getLayoutY() + brick.getyPosition() * brickPanel.getHgap() + brick.getyPosition() * BRICK_SIZE);
+        brickPanel.setLayoutX(gamePanel.getLayoutX() + (brick.getxPosition() * (BRICK_SIZE + brickPanel.getHgap())));
+        brickPanel.setLayoutY(gamePanel.getLayoutY() + (brick.getyPosition() - 2) * (BRICK_SIZE + brickPanel.getVgap()));
         for (int i = 0; i < brick.getBrickData().length; i++) {
             for (int j = 0; j < brick.getBrickData()[i].length; j++) {
                 setRectangleData(brick.getBrickData()[i][j], rectangles[i][j]);
