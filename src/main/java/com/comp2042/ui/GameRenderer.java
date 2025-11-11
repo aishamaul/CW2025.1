@@ -77,25 +77,25 @@ public class GameRenderer {
                 returnPaint = Color.TRANSPARENT;
                 break;
             case 1:
-                returnPaint = Color.AQUA;
+                returnPaint = Color.ORANGE;
                 break;
             case 2:
-                returnPaint = Color.BLUEVIOLET;
+                returnPaint = Color.ORANGERED;
                 break;
             case 3:
-                returnPaint = Color.DARKGREEN;
-                break;
-            case 4:
                 returnPaint = Color.YELLOW;
                 break;
+            case 4:
+                returnPaint = Color.GREENYELLOW;
+                break;
             case 5:
-                returnPaint = Color.RED;
+                returnPaint = Color.AQUA;
                 break;
             case 6:
-                returnPaint = Color.BEIGE;
+                returnPaint = Color.BLUEVIOLET;
                 break;
             case 7:
-                returnPaint = Color.BURLYWOOD;
+                returnPaint = Color.DEEPPINK;
                 break;
             default:
                 returnPaint = Color.WHITE;
