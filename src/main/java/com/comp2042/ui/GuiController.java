@@ -9,11 +9,14 @@ import javafx.animation.Timeline;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Group;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.effect.Reflection;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
@@ -40,6 +43,9 @@ public class GuiController implements Initializable {
 
     @FXML
     private GridPane brickPanel;
+
+    @FXML
+    private ToggleButton pauseButton;
 
     @FXML
     private GameOverPanel gameOverPanel;
@@ -87,6 +93,7 @@ public class GuiController implements Initializable {
                     newGame(null);
                 }
                 if (keyEvent.getCode() == KeyCode.P) {
+                    pauseButton.setSelected(!pauseButton.isSelected());
                     pauseGame(null);
                 }
             }
@@ -156,9 +163,31 @@ public class GuiController implements Initializable {
         timeLine.play();
         isPause.setValue(Boolean.FALSE);
         isGameOver.setValue(Boolean.FALSE);
+
+        pauseButton.setDisable(false);
+        pauseButton.setSelected(false);
     }
 
+    @FXML
     public void pauseGame(ActionEvent actionEvent) {
+        if (pauseButton.isSelected()) {
+            isPause.setValue(Boolean.TRUE);
+            timeLine.pause();
+
+            pauseButton.getStyleClass().remove("pauseButton");
+            if(!pauseButton.getStyleClass().contains("playButton")) {
+                pauseButton.getStyleClass().add("playButton");
+            }
+        }else {
+            isPause.setValue(Boolean.FALSE);
+            timeLine.play();
+
+            pauseButton.getStyleClass().remove("playButton");
+            if(!pauseButton.getStyleClass().contains("pauseButton")) {
+                pauseButton.getStyleClass().add("pauseButton");
+            }
+        }
         gamePanel.requestFocus();
+
     }
 }
