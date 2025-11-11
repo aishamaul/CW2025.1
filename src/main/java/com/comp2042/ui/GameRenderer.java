@@ -66,8 +66,6 @@ public class GameRenderer {
 
     private void setRectangleData(int color, Rectangle rectangle) {
         rectangle.setFill(getFillColor(color));
-        rectangle.setArcHeight(9);
-        rectangle.setArcWidth(9);
     }
 
     private Paint getFillColor(int i) {
