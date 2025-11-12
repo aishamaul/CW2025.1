@@ -9,7 +9,7 @@
 
 <Pane fx:controller="com.comp2042.ui.GuiController"
       xmlns:fx="http://javafx.com/fxml">
-    <BorderPane styleClass="gameBoard" fx:id="gameBoard">
+    <BorderPane styleClass="gameBoard" fx:id="gameBoard" layoutY="85" layoutX="40">
         <center>
             <GridPane fx:id="gamePanel" styleClass="gamePanel" hgap="2" vgap="2" layoutY="30" layoutX="40"/>
         </center>
@@ -23,7 +23,7 @@
         </VBox>
     </Group>
 
-    <ToggleButton fx:id="pauseButton" layoutX="245" layoutY="15" onAction="#pauseGame" styleClass="pauseButton"/>
+    <ToggleButton fx:id="pauseButton" layoutX="275" layoutY="80" onAction="#pauseGame" styleClass="pauseButton"/>
     <stylesheets>
         <URL value="@window_style.css"/>
     </stylesheets>

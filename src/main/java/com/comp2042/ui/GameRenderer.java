@@ -1,6 +1,7 @@
 package com.comp2042.ui;
 
 import com.comp2042.model.ViewData;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
@@ -9,6 +10,8 @@ import javafx.scene.shape.Rectangle;
 public class GameRenderer {
     private static final int BRICK_SIZE = 20;
 
+    private final BorderPane gameBoard;
+
     private final GridPane gamePanel;
     private final GridPane brickPanel;
 
@@ -16,7 +19,8 @@ public class GameRenderer {
     private Rectangle[][] rectangles;
 
 
-    public GameRenderer(GridPane gamePanel, GridPane brickPanel) {
+    public GameRenderer(BorderPane gameBoard, GridPane gamePanel, GridPane brickPanel) {
+        this.gameBoard = gameBoard;
         this.gamePanel = gamePanel;
         this.brickPanel = brickPanel;
     }
@@ -45,8 +49,8 @@ public class GameRenderer {
     }
 
     public void refreshBrick(ViewData brick) {
-        brickPanel.setLayoutX(gamePanel.getLayoutX() + (brick.getxPosition() * (BRICK_SIZE + brickPanel.getHgap())));
-        brickPanel.setLayoutY(gamePanel.getLayoutY() + (brick.getyPosition() - 2) * (BRICK_SIZE + brickPanel.getVgap()));
+        brickPanel.setLayoutX(gameBoard.getLayoutX() + gamePanel.getLayoutX() + (brick.getxPosition() * (BRICK_SIZE + brickPanel.getHgap())));
+        brickPanel.setLayoutY(gameBoard.getLayoutY() + gamePanel.getLayoutY() + (brick.getyPosition() - 2) * (BRICK_SIZE + brickPanel.getVgap()));
         for (int i = 0; i < brick.getBrickData().length; i++) {
             for (int j = 0; j < brick.getBrickData()[i].length; j++) {
                 setRectangleData(brick.getBrickData()[i][j], rectangles[i][j]);

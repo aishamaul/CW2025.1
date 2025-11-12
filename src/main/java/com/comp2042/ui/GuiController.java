@@ -18,6 +18,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Group;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.effect.Reflection;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
@@ -45,6 +46,9 @@ public class GuiController implements Initializable {
     private GridPane brickPanel;
 
     @FXML
+    private BorderPane gameBoard;
+
+    @FXML
     private ToggleButton pauseButton;
 
     @FXML
@@ -66,7 +70,7 @@ public class GuiController implements Initializable {
         gamePanel.setFocusTraversable(true);
         gamePanel.requestFocus();
 
-        this.gameRenderer = new GameRenderer(gamePanel, brickPanel);
+        this.gameRenderer = new GameRenderer(gameBoard, gamePanel, brickPanel);
 
         gamePanel.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
