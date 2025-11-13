@@ -11,6 +11,8 @@ public interface Board {
 
     boolean moveBrickRight();
 
+    int dropBrick();
+
     boolean rotateLeftBrick();
 
     boolean createNewBrick();

@@ -92,6 +92,11 @@ public class GuiController implements Initializable {
                         moveDown(new MoveEvent(EventType.DOWN, EventSource.USER));
                         keyEvent.consume();
                     }
+
+                    if (keyEvent.getCode() == KeyCode.SPACE) {
+                        moveDown(new MoveEvent(EventType.DROP, EventSource.USER));
+                        keyEvent.consume();
+                    }
                 }
                 if (keyEvent.getCode() == KeyCode.N) {
                     newGame(null);
@@ -135,7 +140,13 @@ public class GuiController implements Initializable {
 
     private void moveDown(MoveEvent event) {
         if (isPause.getValue() == Boolean.FALSE) {
-            DownData downData = eventListener.onDownEvent(event);
+            DownData downData;
+
+            if (event.getEventType() == EventType.DROP) {
+                downData = eventListener.onDropEvent(event);
+            } else{
+                downData = eventListener.onDownEvent(event);
+            }
             if (downData.getClearRow() != null && downData.getClearRow().getLinesRemoved() > 0) {
                 NotificationPanel notificationPanel = new NotificationPanel("+" + downData.getClearRow().getScoreBonus());
                 groupNotification.getChildren().add(notificationPanel);

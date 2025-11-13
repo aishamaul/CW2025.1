@@ -131,4 +131,17 @@ public class SimpleBoard implements Board {
         score.reset();
         createNewBrick();
     }
+
+    @Override
+    public int dropBrick(){
+        Point p = new Point(currentOffset);
+        int startY = (int) p.getY();
+
+        while (!MatrixOperations.intersect(currentGameMatrix, brickRotator.getCurrentShape(), (int) p.getX(), (int) p.getY() + 1)) {
+            p.translate(0, 1);
+        }
+        currentOffset = p;
+        return (int) currentOffset.getY() - startY;
+
+    }
 }
