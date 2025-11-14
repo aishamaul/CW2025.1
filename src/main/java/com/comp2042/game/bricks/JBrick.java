@@ -5,9 +5,7 @@ import com.comp2042.util.MatrixOperations;
 import java.util.ArrayList;
 import java.util.List;
 
-final class JBrick implements Brick {
-
-    private final List<int[][]> brickMatrix = new ArrayList<>();
+final class JBrick extends AbstractBrick {
 
     public JBrick() {
         brickMatrix.add(new int[][]{
@@ -34,10 +32,5 @@ final class JBrick implements Brick {
                 {0, 2, 2, 0},
                 {0, 0, 0, 0}
         });
-    }
-
-    @Override
-    public List<int[][]> getShapeMatrix() {
-        return MatrixOperations.deepCopyList(brickMatrix);
     }
 }
