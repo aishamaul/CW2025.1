@@ -35,7 +35,7 @@ import com.comp2042.model.ViewData;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class GuiController implements Initializable {
+public class GuiController implements Initializable, GameView {
 
     @FXML
     private GridPane gamePanel;
@@ -119,6 +119,7 @@ public class GuiController implements Initializable {
         reflection.setTopOffset(-12);
     }
 
+    @Override
     public void initGameView(int[][] boardMatrix, ViewData brick) {
         gameRenderer.initGameView(boardMatrix, brick);
 
@@ -132,12 +133,14 @@ public class GuiController implements Initializable {
 
 
 
-    private void refreshBrick(ViewData brick) {
+    @Override
+    public void refreshBrick(ViewData brick) {
         if (isPause.getValue() == Boolean.FALSE) {
             gameRenderer.refreshBrick(brick);
         }
     }
 
+    @Override
     public void refreshGameBackground(int[][] board) {
         gameRenderer.refreshGameBackground(board);
     }
@@ -151,28 +154,33 @@ public class GuiController implements Initializable {
             } else{
                 downData = eventListener.onDownEvent(event);
             }
-            if (downData.getClearRow() != null && downData.getClearRow().getLinesRemoved() > 0) {
-                NotificationPanel notificationPanel = new NotificationPanel("+" + downData.getClearRow().getScoreBonus());
-                groupNotification.getChildren().add(notificationPanel);
-                notificationPanel.showScore(groupNotification.getChildren());
-            }
             refreshBrick(downData.getViewData());
         }
         gamePanel.requestFocus();
     }
 
+    @Override
     public void setEventListener(InputEventListener eventListener) {
         this.eventListener = eventListener;
     }
 
+    @Override
     public void bindScore(IntegerProperty integerProperty) {
         scoreLabel.textProperty().bind(integerProperty.asString());
     }
 
+    @Override
     public void gameOver() {
         timeLine.stop();
         gameOverPanel.setVisible(true);
         isGameOver.setValue(Boolean.TRUE);
+    }
+
+    @Override
+    public void showScoreNotification(String text) {
+        NotificationPanel notificationPanel = new NotificationPanel(text);
+        groupNotification.getChildren().add(notificationPanel);
+        notificationPanel.showScore(groupNotification.getChildren());
     }
 
     public void newGame(ActionEvent actionEvent) {

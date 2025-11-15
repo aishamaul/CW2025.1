@@ -6,20 +6,21 @@ import com.comp2042.game.events.MoveEvent;
 import com.comp2042.model.ClearRow;
 import com.comp2042.model.DownData;
 import com.comp2042.model.ViewData;
+import com.comp2042.ui.GameView;
 import com.comp2042.ui.GuiController;
 
 public class GameController implements InputEventListener {
 
     private final Board board = new SimpleBoard(25, 10);
 
-    private final GuiController viewGuiController;
+    private final GameView view;
 
-    public GameController(GuiController guiController) {
-        viewGuiController = guiController;
+    public GameController(GameView view) {
+        this.view = view;
         board.createNewBrick();
-        viewGuiController.setEventListener(this);
-        viewGuiController.initGameView(board.getBoardMatrix(), board.getViewData());
-        viewGuiController.bindScore(board.getScore().scoreProperty());
+        this.view.setEventListener(this);
+        this.view.initGameView(board.getBoardMatrix(), board.getViewData());
+        this.view.bindScore(board.getScore().scoreProperty());
     }
 
     private ClearRow handleGameOver(){
@@ -27,12 +28,13 @@ public class GameController implements InputEventListener {
         ClearRow clearRow = board.clearRows();
         if (clearRow.getLinesRemoved() > 0) {
             board.getScore().add(clearRow.getScoreBonus());
+            view.showScoreNotification("+" + clearRow.getScoreBonus());
         }
         if (board.createNewBrick()) {
-            viewGuiController.gameOver();
+            view.gameOver();
         }
 
-        viewGuiController.refreshGameBackground(board.getBoardMatrix());
+        view.refreshGameBackground(board.getBoardMatrix());
         return clearRow;
     }
 
@@ -88,6 +90,6 @@ public class GameController implements InputEventListener {
     @Override
     public void createNewGame() {
         board.newGame();
-        viewGuiController.refreshGameBackground(board.getBoardMatrix());
+        view.refreshGameBackground(board.getBoardMatrix());
     }
 }
