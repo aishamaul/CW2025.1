@@ -1,11 +1,10 @@
 package com.comp2042.ui;
 
+import com.comp2042.game.GameLoopManager;
 import com.comp2042.game.events.EventSource;
 import com.comp2042.game.events.EventType;
 import com.comp2042.game.events.InputEventListener;
 import com.comp2042.game.events.MoveEvent;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -60,7 +59,7 @@ public class GuiController implements Initializable, GameView {
 
     private InputEventListener eventListener;
 
-    private Timeline timeLine;
+    private GameLoopManager gameLoopManager;
 
     private GameRenderer gameRenderer;
 
@@ -91,12 +90,8 @@ public class GuiController implements Initializable, GameView {
 
         gamePanel.setOnKeyPressed(new InputHandler(this, eventListener, isPause, isGameOver, this::moveDown, () -> newGame(null), () -> pauseGame(null)));
 
-        timeLine = new Timeline(new KeyFrame(
-                Duration.millis(400),
-                ae -> moveDown(new MoveEvent(EventType.DOWN, EventSource.THREAD))
-        ));
-        timeLine.setCycleCount(Timeline.INDEFINITE);
-        timeLine.play();
+        gameLoopManager = new GameLoopManager(() -> moveDown(new MoveEvent(EventType.DOWN, EventSource.THREAD)));
+        gameLoopManager.play();
     }
 
 
@@ -140,7 +135,7 @@ public class GuiController implements Initializable, GameView {
 
     @Override
     public void gameOver() {
-        timeLine.stop();
+        gameLoopManager.stop();
         gameOverPanel.setVisible(true);
         isGameOver.setValue(Boolean.TRUE);
     }
@@ -153,11 +148,11 @@ public class GuiController implements Initializable, GameView {
     }
 
     public void newGame(ActionEvent actionEvent) {
-        timeLine.stop();
+        gameLoopManager.stop();
         gameOverPanel.setVisible(false);
         eventListener.createNewGame();
         gamePanel.requestFocus();
-        timeLine.play();
+        gameLoopManager.play();
         isPause.setValue(Boolean.FALSE);
         isGameOver.setValue(Boolean.FALSE);
 
@@ -169,7 +164,7 @@ public class GuiController implements Initializable, GameView {
     public void pauseGame(ActionEvent actionEvent) {
         if (pauseButton.isSelected()) {
             isPause.setValue(Boolean.TRUE);
-            timeLine.pause();
+            gameLoopManager.pause();
 
             pauseButton.getStyleClass().remove("pauseButton");
             if(!pauseButton.getStyleClass().contains("playButton")) {
@@ -177,7 +172,7 @@ public class GuiController implements Initializable, GameView {
             }
         }else {
             isPause.setValue(Boolean.FALSE);
-            timeLine.play();
+            gameLoopManager.play();
 
             pauseButton.getStyleClass().remove("playButton");
             if(!pauseButton.getStyleClass().contains("pauseButton")) {
