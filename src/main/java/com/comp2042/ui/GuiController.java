@@ -63,6 +63,8 @@ public class GuiController implements Initializable, GameView {
 
     private GameRenderer gameRenderer;
 
+    private NotificationManager notificationManager;
+
     private final BooleanProperty isPause = new SimpleBooleanProperty();
 
     private final BooleanProperty isGameOver = new SimpleBooleanProperty();
@@ -75,6 +77,7 @@ public class GuiController implements Initializable, GameView {
         gamePanel.requestFocus();
 
         this.gameRenderer = new GameRenderer(gameBoard, gamePanel, brickPanel);
+        this.notificationManager = new NotificationManager(groupNotification);
 
         gameOverPanel.setVisible(false);
 
@@ -142,9 +145,7 @@ public class GuiController implements Initializable, GameView {
 
     @Override
     public void showScoreNotification(String text) {
-        NotificationPanel notificationPanel = new NotificationPanel(text);
-        groupNotification.getChildren().add(notificationPanel);
-        notificationPanel.showScore(groupNotification.getChildren());
+        notificationManager.showScore(text);
     }
 
     public void newGame(ActionEvent actionEvent) {
