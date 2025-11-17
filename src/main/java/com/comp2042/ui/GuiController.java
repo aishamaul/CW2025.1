@@ -55,6 +55,9 @@ public class GuiController implements Initializable, GameView {
     @FXML
     private GameOverPanel gameOverPanel;
 
+    @FXML
+    private Label scoreLabel;
+
     private InputEventListener eventListener;
 
     private Timeline timeLine;
@@ -65,8 +68,6 @@ public class GuiController implements Initializable, GameView {
 
     private final BooleanProperty isGameOver = new SimpleBooleanProperty();
 
-    @FXML
-    private Label scoreLabel;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -76,41 +77,6 @@ public class GuiController implements Initializable, GameView {
 
         this.gameRenderer = new GameRenderer(gameBoard, gamePanel, brickPanel);
 
-        gamePanel.setOnKeyPressed(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent keyEvent) {
-                if (isPause.getValue() == Boolean.FALSE && isGameOver.getValue() == Boolean.FALSE) {
-                    if (keyEvent.getCode() == KeyCode.LEFT || keyEvent.getCode() == KeyCode.A) {
-                        refreshBrick(eventListener.onLeftEvent(new MoveEvent(EventType.LEFT, EventSource.USER)));
-                        keyEvent.consume();
-                    }
-                    if (keyEvent.getCode() == KeyCode.RIGHT || keyEvent.getCode() == KeyCode.D) {
-                        refreshBrick(eventListener.onRightEvent(new MoveEvent(EventType.RIGHT, EventSource.USER)));
-                        keyEvent.consume();
-                    }
-                    if (keyEvent.getCode() == KeyCode.UP || keyEvent.getCode() == KeyCode.W) {
-                        refreshBrick(eventListener.onRotateEvent(new MoveEvent(EventType.ROTATE, EventSource.USER)));
-                        keyEvent.consume();
-                    }
-                    if (keyEvent.getCode() == KeyCode.DOWN || keyEvent.getCode() == KeyCode.S) {
-                        moveDown(new MoveEvent(EventType.DOWN, EventSource.USER));
-                        keyEvent.consume();
-                    }
-
-                    if (keyEvent.getCode() == KeyCode.SPACE) {
-                        moveDown(new MoveEvent(EventType.DROP, EventSource.USER));
-                        keyEvent.consume();
-                    }
-                }
-                if (keyEvent.getCode() == KeyCode.N) {
-                    newGame(null);
-                }
-                if (keyEvent.getCode() == KeyCode.P) {
-                    pauseButton.setSelected(!pauseButton.isSelected());
-                    pauseGame(null);
-                }
-            }
-        });
         gameOverPanel.setVisible(false);
 
         final Reflection reflection = new Reflection();
@@ -122,6 +88,8 @@ public class GuiController implements Initializable, GameView {
     @Override
     public void initGameView(int[][] boardMatrix, ViewData brick) {
         gameRenderer.initGameView(boardMatrix, brick);
+
+        gamePanel.setOnKeyPressed(new InputHandler(this, eventListener, isPause, isGameOver, this::moveDown, () -> newGame(null), () -> pauseGame(null)));
 
         timeLine = new Timeline(new KeyFrame(
                 Duration.millis(400),
@@ -145,7 +113,8 @@ public class GuiController implements Initializable, GameView {
         gameRenderer.refreshGameBackground(board);
     }
 
-    private void moveDown(MoveEvent event) {
+    // change from private to public so the InputHandler can pass the reference
+    public void moveDown(MoveEvent event) {
         if (isPause.getValue() == Boolean.FALSE) {
             DownData downData;
 
