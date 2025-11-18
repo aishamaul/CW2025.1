@@ -57,7 +57,7 @@ public class GuiController implements Initializable, GameView {
     @FXML
     private Label scoreLabel;
 
-    private InputEventListener eventListener;
+    private EventDispatcher dispatcher;
 
     private GameLoopManager gameLoopManager;
 
@@ -91,9 +91,9 @@ public class GuiController implements Initializable, GameView {
     public void initGameView(int[][] boardMatrix, ViewData brick) {
         gameRenderer.initGameView(boardMatrix, brick);
 
-        gamePanel.setOnKeyPressed(new InputHandler(this, eventListener, isPause, isGameOver, this::moveDown, () -> newGame(null), () -> pauseGame(null)));
+        gamePanel.setOnKeyPressed(new InputHandler(this, dispatcher, isPause, isGameOver, this::moveDown, () -> newGame(null), () -> pauseGame(null)));
 
-        gameLoopManager = new GameLoopManager(() -> moveDown(new MoveEvent(EventType.DOWN, EventSource.THREAD)));
+        gameLoopManager = new GameLoopManager(() -> moveDown(EventType.DOWN, EventSource.THREAD));
         gameLoopManager.play();
     }
 
@@ -111,16 +111,9 @@ public class GuiController implements Initializable, GameView {
         gameRenderer.refreshGameBackground(board);
     }
 
-    // change from private to public so the InputHandler can pass the reference
-    public void moveDown(MoveEvent event) {
+    public void moveDown(EventType eventType, EventSource source) {
         if (isPause.getValue() == Boolean.FALSE) {
-            DownData downData;
-
-            if (event.getEventType() == EventType.DROP) {
-                downData = eventListener.onDropEvent(event);
-            } else{
-                downData = eventListener.onDownEvent(event);
-            }
+            DownData downData = dispatcher.moveDown(eventType, source);
             refreshBrick(downData.getViewData());
         }
         gamePanel.requestFocus();
@@ -128,7 +121,7 @@ public class GuiController implements Initializable, GameView {
 
     @Override
     public void setEventListener(InputEventListener eventListener) {
-        this.eventListener = eventListener;
+        this.dispatcher = new EventDispatcher(eventListener);
     }
 
     @Override
@@ -151,7 +144,7 @@ public class GuiController implements Initializable, GameView {
     public void newGame(ActionEvent actionEvent) {
         gameLoopManager.stop();
         gameOverPanel.setVisible(false);
-        eventListener.createNewGame();
+        dispatcher.newGame();
         gamePanel.requestFocus();
         gameLoopManager.play();
         isPause.setValue(Boolean.FALSE);
