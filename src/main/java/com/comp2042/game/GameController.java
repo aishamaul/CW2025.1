@@ -11,85 +11,63 @@ public class GameController implements InputEventListener {
 
     private final Board board = new SimpleBoard(25, 10);
 
-    private final GameViewAdapter viewAdapter;
-
-    private final ScoreEvaluator scoreEvaluator;
+    private final GameLifecycleManager lifecycleManager;
 
     public GameController(GameView view) {
-        this.scoreEvaluator = new ScoreEvaluator();
-        this.viewAdapter = new GameViewAdapter(view);
+        ScoreEvaluator scoreEvaluator = new ScoreEvaluator();
+        GameViewAdapter viewAdapter = new GameViewAdapter(view);
+        this.lifecycleManager = new GameLifecycleManager(board, scoreEvaluator, viewAdapter);
+
         board.createNewBrick();
-        this.viewAdapter.view.setEventListener(this);
-        this.viewAdapter.initializeView(board.getBoardMatrix(), board.getViewData());
-        this.viewAdapter.bindScore(board.getScore().scoreProperty());
+
+        viewAdapter.view.setEventListener(this);
+        viewAdapter.initializeView(board.getBoardMatrix(), lifecycleManager.getViewData());
+        viewAdapter.bindScore(board.getScore().scoreProperty());
 
     }
-
-    private ClearRow handleGameOver(){
-        board.mergeBrickToBackground();
-        ClearRow clearRow = board.clearRows();
-        if (clearRow.getLinesRemoved() > 0) {
-            scoreEvaluator.scoreLineClear(clearRow.getScoreBonus(), board.getScore());
-            viewAdapter.showScoreNotification(clearRow.getScoreBonus());
-        }
-        if (board.createNewBrick()) {
-            viewAdapter.gameOver();
-        }
-
-        viewAdapter.refreshGameBackground(board.getBoardMatrix());
-        return clearRow;
-    }
-
 
     @Override
     public DownData onDownEvent(MoveEvent event) {
-        boolean canMove = board.moveBrickDown();
-        ClearRow clearRow = null;
-        if (!canMove) {
-            clearRow = handleGameOver();
-
-        } else {
-            scoreEvaluator.scoreMovement(event, board.getScore());
-            viewAdapter.refreshBrick(board.getViewData());
+        if (board.moveBrickDown()){
+            lifecycleManager.getScoreEvaluator().scoreMovement(event, board.getScore());
+            lifecycleManager.getViewAdapter().refreshBrick(lifecycleManager.getViewData());
+            return new DownData(null, lifecycleManager.getViewData());
+        }else{
+            return lifecycleManager.processTurnEnd();
         }
-        return new DownData(clearRow, board.getViewData());
     }
 
     @Override
     public DownData onDropEvent(MoveEvent event){
         int rowsDropped = board.dropBrick();
-        scoreEvaluator.scoreDrop(rowsDropped, board.getScore());
-
-        ClearRow clearRow = handleGameOver();
-
-        return new DownData(clearRow, board.getViewData());
+        lifecycleManager.getScoreEvaluator().scoreDrop(rowsDropped, board.getScore());
+        return lifecycleManager.processTurnEnd();
     }
 
     @Override
     public ViewData onLeftEvent(MoveEvent event) {
         board.moveBrickLeft();
-        viewAdapter.refreshBrick(board.getViewData());
-        return board.getViewData();
+        lifecycleManager.getViewAdapter().refreshBrick(lifecycleManager.getViewData());
+        return lifecycleManager.getViewData();
     }
 
     @Override
     public ViewData onRightEvent(MoveEvent event) {
         board.moveBrickRight();
-        viewAdapter.refreshBrick(board.getViewData());
-        return board.getViewData();
+        lifecycleManager.getViewAdapter().refreshBrick(lifecycleManager.getViewData());
+        return lifecycleManager.getViewData();
     }
 
     @Override
     public ViewData onRotateEvent(MoveEvent event) {
         board.rotateLeftBrick();
-        viewAdapter.refreshBrick(board.getViewData());
-        return board.getViewData();
+        lifecycleManager.getViewAdapter().refreshBrick((lifecycleManager.getViewData()));
+        return lifecycleManager.getViewData();
     }
 
 
     @Override
     public void createNewGame() {
-        board.newGame();
-        viewAdapter.refreshGameBackground(board.getBoardMatrix());
+        lifecycleManager.handleNewGame();
     }
 }

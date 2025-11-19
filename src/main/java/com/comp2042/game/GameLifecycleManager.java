@@ -1,0 +1,50 @@
+package com.comp2042.game;
+
+import com.comp2042.model.ClearRow;
+import com.comp2042.model.DownData;
+import com.comp2042.model.ViewData;
+import com.comp2042.ui.GameView;
+
+public class GameLifecycleManager {
+
+    private final Board board;
+    private final ScoreEvaluator scoreEvaluator;
+    private final GameViewAdapter viewAdapter;
+
+    public GameLifecycleManager(Board board, ScoreEvaluator scoreEvaluator, GameViewAdapter viewAdapter) {
+        this.board = board;
+        this.scoreEvaluator = scoreEvaluator;
+        this.viewAdapter = viewAdapter;
+    }
+
+    public DownData processTurnEnd() {
+        board.mergeBrickToBackground();
+        ClearRow clearRow = board.clearRows();
+        if (clearRow.getLinesRemoved() > 0) {
+            scoreEvaluator.scoreLineClear(clearRow.getScoreBonus(), board.getScore());
+            viewAdapter.showScoreNotification(clearRow.getScoreBonus());
+        }
+        if (board.createNewBrick()) {
+            viewAdapter.gameOver();
+        }
+        viewAdapter.refreshGameBackground(board.getBoardMatrix());
+        return new DownData(clearRow, board.getViewData());
+    }
+
+    public void handleNewGame() {
+        board.newGame();
+        viewAdapter.refreshGameBackground(board.getBoardMatrix());
+    }
+
+    public ScoreEvaluator getScoreEvaluator() {
+        return scoreEvaluator;
+    }
+
+    public ViewData getViewData() {
+        return board.getViewData();
+    }
+
+    public GameViewAdapter getViewAdapter() {
+        return viewAdapter;
+    }
+}
