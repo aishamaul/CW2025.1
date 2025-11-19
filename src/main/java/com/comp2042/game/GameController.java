@@ -15,19 +15,22 @@ public class GameController implements InputEventListener {
 
     private final GameView view;
 
+    private final ScoreEvaluator scoreEvaluator;
+
     public GameController(GameView view) {
         this.view = view;
         board.createNewBrick();
         this.view.setEventListener(this);
         this.view.initGameView(board.getBoardMatrix(), board.getViewData());
         this.view.bindScore(board.getScore().scoreProperty());
+        this.scoreEvaluator = new ScoreEvaluator();
     }
 
     private ClearRow handleGameOver(){
         board.mergeBrickToBackground();
         ClearRow clearRow = board.clearRows();
         if (clearRow.getLinesRemoved() > 0) {
-            board.getScore().add(clearRow.getScoreBonus());
+            scoreEvaluator.scoreLineClear(clearRow.getScoreBonus(), board.getScore());
             view.showScoreNotification("+" + clearRow.getScoreBonus());
         }
         if (board.createNewBrick()) {
@@ -36,12 +39,6 @@ public class GameController implements InputEventListener {
 
         view.refreshGameBackground(board.getBoardMatrix());
         return clearRow;
-    }
-
-    private void userScore(MoveEvent event){
-        if (event.getEventSource() == EventSource.USER) {
-            board.getScore().add(1);
-        }
     }
 
 
@@ -53,7 +50,7 @@ public class GameController implements InputEventListener {
             clearRow = handleGameOver();
 
         } else {
-            userScore(event);
+            scoreEvaluator.scoreMovement(event, board.getScore());
         }
         return new DownData(clearRow, board.getViewData());
     }
@@ -61,7 +58,7 @@ public class GameController implements InputEventListener {
     @Override
     public DownData onDropEvent(MoveEvent event){
         int rowsDropped = board.dropBrick();
-        board.getScore().add(rowsDropped * 2);
+        scoreEvaluator.scoreDrop(rowsDropped, board.getScore());
 
         ClearRow clearRow = handleGameOver();
 
