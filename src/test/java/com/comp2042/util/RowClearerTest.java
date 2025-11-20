@@ -26,10 +26,10 @@ class RowClearerTest {
                 {0,1,1,0},
                 {1,0,1,0},
         };
-        ClearRow result = rowClearer.checkRemoving(boardBefore);
+        RowClearingOutput result = rowClearer.checkRemoving(boardBefore);
 
         assertEquals(0, result.getLinesRemoved(), "Should be 0 line removed.");
-        assertEquals(0, result.getScoreBonus(), "score bonus should be 0.");
+        assertArrayEquals(expectedBoardAfter, result.getNewMatrix(), "The new matrix is not as expected");
     }
 
     @Test
@@ -46,11 +46,8 @@ class RowClearerTest {
                 {1,0,1,0}
         };
 
-        ClearRow result = rowClearer.checkRemoving(boardBefore);
+        RowClearingOutput result = rowClearer.checkRemoving(boardBefore);
         assertEquals(1, result.getLinesRemoved(), "Should be 1 line removed.");
-
-        assertEquals(50, result.getScoreBonus(), "score bonus for 1 line should be 50.");
-
         assertArrayEquals(expectedBoardAfter, result.getNewMatrix(),"The new matrix is not as expected.");
 
     }
@@ -72,11 +69,8 @@ class RowClearerTest {
 
         };
 
-        ClearRow result = rowClearer.checkRemoving(boardBefore);
+        RowClearingOutput result = rowClearer.checkRemoving(boardBefore);
         assertEquals(4, result.getLinesRemoved(), "Should be 4 lines removed.");
-
-        assertEquals(800, result.getScoreBonus(), "score bonus for 4 lines should be 800.");
-
         assertArrayEquals(expectedBoardAfter, result.getNewMatrix(),"The new matrix should be empty.");
     }
 
