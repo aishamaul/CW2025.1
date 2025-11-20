@@ -18,11 +18,14 @@ public class GameRenderer {
     private Rectangle[][] displayMatrix;
     private Rectangle[][] rectangles;
 
+    private final BrickColor brickColor;
+
 
     public GameRenderer(BorderPane gameBoard, GridPane gamePanel, GridPane brickPanel) {
         this.gameBoard = gameBoard;
         this.gamePanel = gamePanel;
         this.brickPanel = brickPanel;
+        this.brickColor = new BrickColor();
     }
 
     public void initGameView(int[][] boardMatrix, ViewData brick) {
@@ -30,7 +33,7 @@ public class GameRenderer {
         for (int i = 2; i < boardMatrix.length; i++) {
             for (int j = 0; j < boardMatrix[i].length; j++) {
                 Rectangle rectangle = new Rectangle(BRICK_SIZE, BRICK_SIZE);
-                rectangle.setFill(Color.TRANSPARENT);
+                rectangle.setFill(brickColor.getFillColor(0));
                 displayMatrix[i][j] = rectangle;
                 gamePanel.add(rectangle, j, i - 2);
             }
@@ -40,7 +43,7 @@ public class GameRenderer {
         for (int i = 0; i < brick.getBrickData().length; i++) {
             for (int j = 0; j < brick.getBrickData()[i].length; j++) {
                 Rectangle rectangle = new Rectangle(BRICK_SIZE, BRICK_SIZE);
-                rectangle.setFill(getFillColor(brick.getBrickData()[i][j]));
+                rectangle.setFill(brickColor.getFillColor(brick.getBrickData()[i][j]));
                 rectangles[i][j] = rectangle;
                 brickPanel.add(rectangle, j, i);
             }
@@ -69,42 +72,8 @@ public class GameRenderer {
 
 
     private void setRectangleData(int color, Rectangle rectangle) {
-        rectangle.setFill(getFillColor(color));
-    }
 
-    private Paint getFillColor(int i) {
-        Paint returnPaint;
-        switch (i) {
-            case 0:
-                returnPaint = Color.TRANSPARENT;
-                break;
-            case 1:
-                returnPaint = Color.ORANGE;
-                break;
-            case 2:
-                returnPaint = Color.ORANGERED;
-                break;
-            case 3:
-                returnPaint = Color.YELLOW;
-                break;
-            case 4:
-                returnPaint = Color.GREENYELLOW;
-                break;
-            case 5:
-                returnPaint = Color.AQUA;
-                break;
-            case 6:
-                returnPaint = Color.BLUEVIOLET;
-                break;
-            case 7:
-                returnPaint = Color.DEEPPINK;
-                break;
-            default:
-                returnPaint = Color.WHITE;
-                break;
-        }
-        return returnPaint;
+        rectangle.setFill(brickColor.getFillColor(color));
     }
-
 
 }
