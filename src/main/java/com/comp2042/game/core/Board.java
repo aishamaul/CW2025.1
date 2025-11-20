@@ -1,5 +1,6 @@
-package com.comp2042.game;
+package com.comp2042.game.core;
 
+import com.comp2042.game.scoring.Score;
 import com.comp2042.model.ClearRow;
 import com.comp2042.model.ViewData;
 

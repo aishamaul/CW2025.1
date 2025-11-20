@@ -1,10 +1,8 @@
-package com.comp2042.ui;
+package com.comp2042.ui.render;
 
 import com.comp2042.model.ViewData;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 
 public class GameRenderer {

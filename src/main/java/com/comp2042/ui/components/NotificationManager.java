@@ -1,8 +1,6 @@
-package com.comp2042.ui;
+package com.comp2042.ui.components;
 
 import javafx.scene.Group;
-
-import javax.swing.*;
 
 public class NotificationManager {
 

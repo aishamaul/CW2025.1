@@ -1,11 +1,12 @@
-package com.comp2042.game;
+package com.comp2042.game.core;
 
+import com.comp2042.ui.view.GameViewAdapter;
+import com.comp2042.game.scoring.ScoreEvaluator;
 import com.comp2042.game.events.InputEventListener;
 import com.comp2042.game.events.MoveEvent;
-import com.comp2042.model.ClearRow;
 import com.comp2042.model.DownData;
 import com.comp2042.model.ViewData;
-import com.comp2042.ui.GameView;
+import com.comp2042.ui.view.GameView;
 
 public class GameController implements InputEventListener {
 

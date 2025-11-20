@@ -1,4 +1,4 @@
-package com.comp2042.ui;
+package com.comp2042.ui.view;
 
 import com.comp2042.game.events.InputEventListener;
 import com.comp2042.model.ViewData;

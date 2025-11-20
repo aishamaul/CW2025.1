@@ -1,8 +1,5 @@
-package com.comp2042.game;
+package com.comp2042.game.core;
 
-import com.comp2042.game.events.EventSource;
-import com.comp2042.game.events.EventType;
-import com.comp2042.game.events.MoveEvent;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.util.Duration;

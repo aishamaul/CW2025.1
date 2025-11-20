@@ -1,5 +1,7 @@
-package com.comp2042.game;
+package com.comp2042.game.core;
 
+import com.comp2042.game.scoring.RowScoreCalculator;
+import com.comp2042.game.scoring.Score;
 import com.comp2042.game.bricks.Brick;
 import com.comp2042.game.bricks.BrickGenerator;
 import com.comp2042.game.bricks.RandomBrickGenerator;

@@ -1,18 +1,14 @@
-package com.comp2042.ui;
+package com.comp2042.ui.input;
 
 import com.comp2042.game.events.EventSource;
 import com.comp2042.game.events.EventType;
-import com.comp2042.game.events.InputEventListener;
-import com.comp2042.game.events.MoveEvent;
-import com.comp2042.model.ViewData;
+import com.comp2042.ui.view.GameView;
 import javafx.beans.property.BooleanProperty;
 import javafx.event.EventHandler;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
-import javax.swing.text.View;
 import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 
 public class InputHandler implements EventHandler<KeyEvent> {
     private final GameView gameView;

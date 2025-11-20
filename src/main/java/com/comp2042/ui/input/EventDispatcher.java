@@ -1,4 +1,4 @@
-package com.comp2042.ui;
+package com.comp2042.ui.input;
 
 import com.comp2042.game.events.EventSource;
 import com.comp2042.game.events.EventType;

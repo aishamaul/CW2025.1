@@ -1,5 +1,7 @@
 package com.comp2042.game;
 
+import com.comp2042.game.core.Board;
+import com.comp2042.game.core.SimpleBoard;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

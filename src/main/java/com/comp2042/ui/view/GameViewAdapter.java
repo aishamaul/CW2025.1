@@ -1,7 +1,6 @@
-package com.comp2042.game;
+package com.comp2042.ui.view;
 
 import com.comp2042.model.ViewData;
-import com.comp2042.ui.GameView;
 import javafx.beans.property.IntegerProperty;
 
 public class GameViewAdapter {
