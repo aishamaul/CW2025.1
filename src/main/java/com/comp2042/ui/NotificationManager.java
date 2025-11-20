@@ -7,14 +7,20 @@ import javax.swing.*;
 public class NotificationManager {
 
     private final Group groupNotification;
+    private final NotificationAnimator animator;
 
     public NotificationManager(Group groupNotification) {
+
         this.groupNotification = groupNotification;
+        this.animator = new NotificationAnimator();
     }
 
     public void showScore(String text){
         NotificationPanel notificationPanel = new NotificationPanel(text);
         groupNotification.getChildren().add(notificationPanel);
-        notificationPanel.showScore(groupNotification.getChildren());
+
+
+        Runnable cleanup = () -> {groupNotification.getChildren().remove(notificationPanel);};
+        animator.animate(notificationPanel, cleanup);
     }
 }
