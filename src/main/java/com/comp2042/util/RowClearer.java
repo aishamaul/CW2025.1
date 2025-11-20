@@ -8,7 +8,7 @@ import java.util.Deque;
 import java.util.List;
 
 public class RowClearer {
-    public ClearRow checkRemoving(final int[][] matrix) {
+    public RowClearingOutput checkRemoving(final int[][] matrix) {
         int[][] tmp = new int[matrix.length][matrix[0].length];
         Deque<int[]> newRows = new ArrayDeque<>();
         List<Integer> clearedRows = new ArrayList<>();
@@ -36,8 +36,7 @@ public class RowClearer {
                 break;
             }
         }
-        int scoreBonus = 50 * clearedRows.size() * clearedRows.size();
-        return new ClearRow(clearedRows.size(), tmp, scoreBonus);
+        return new RowClearingOutput(clearedRows.size(), tmp);
     }
 
 }
