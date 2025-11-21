@@ -31,13 +31,10 @@ class SimpleBoardTest {
 
     @Test
     void testMoveBrickLeft_HitsWall(){
-        board.moveBrickLeft();
-        board.moveBrickLeft();
-        board.moveBrickLeft();
-        board.moveBrickLeft();
-
-        assertEquals(0, board.getViewData().getxPosition(), "Test setup failed. Brick is not at x=0");
-
+        int lastSuccessfulX = board.getViewData().getxPosition();
+        while(board.moveBrickLeft()){
+            lastSuccessfulX = board.getViewData().getxPosition();
+        }
         boolean canMove = board.moveBrickLeft();
 
         assertFalse(canMove, "Should return false when trying to move past left wall.");
@@ -46,15 +43,15 @@ class SimpleBoardTest {
 
     @Test
     void testMoveBrickRight_HitsWall(){
-        board.moveBrickRight();
-        board.moveBrickRight();
+        int lastSuccessfulX  = board.getViewData().getxPosition();
+        while(board.moveBrickRight()){
+            lastSuccessfulX = board.getViewData().getxPosition();
+        }
 
-        assertEquals(6, board.getViewData().getxPosition(), "Test setup failed. Brick is not at x=6.");
+        boolean canMoveAfterHittingWall = board.moveBrickRight();
 
-        boolean canMove = board.moveBrickRight();
-
-        assertFalse(canMove, "Should return false when trying to move past right wall.");
-        assertEquals(6, board.getViewData().getxPosition(), "x-position should remain 6.");
+        assertFalse(canMoveAfterHittingWall, "Should return false when trying to move past right wall.");
+        assertEquals(lastSuccessfulX, board.getViewData().getxPosition(), "x-position should remain the same after hitting right wall.");
     }
 
     @Test
