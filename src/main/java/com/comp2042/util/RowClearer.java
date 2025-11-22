@@ -8,35 +8,42 @@ import java.util.Deque;
 import java.util.List;
 
 public class RowClearer {
+
     public RowClearingOutput checkRemoving(final int[][] matrix) {
-        int[][] tmp = new int[matrix.length][matrix[0].length];
         Deque<int[]> newRows = new ArrayDeque<>();
         List<Integer> clearedRows = new ArrayList<>();
 
         for (int i = 0; i < matrix.length; i++) {
-            int[] tmpRow = new int[matrix[i].length];
-            boolean rowToClear = true;
-            for (int j = 0; j < matrix[0].length; j++) {
-                if (matrix[i][j] == 0) {
-                    rowToClear = false;
-                }
-                tmpRow[j] = matrix[i][j];
-            }
-            if (rowToClear) {
+            if(isRowFull(matrix[i])) {
                 clearedRows.add(i);
             } else {
-                newRows.add(tmpRow);
+                newRows.addLast(matrix[i].clone());
             }
         }
-        for (int i = matrix.length - 1; i >= 0; i--) {
+        return new RowClearingOutput(clearedRows.size(), buildNewMatrix(newRows, matrix.length, matrix[0].length));
+    }
+
+    private boolean isRowFull(int[] row) {
+        for (int cell : row) {
+            if (cell == 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private int[][] buildNewMatrix(Deque<int[]> newRows, int rows, int cols) {
+        int[][] tmp = new int[rows][cols];
+
+        for(int i=rows-1; i>=0; i--) {
             int[] row = newRows.pollLast();
-            if (row != null) {
+            if(row != null) {
                 tmp[i] = row;
             } else {
-                break;
+                break; // empty row
             }
         }
-        return new RowClearingOutput(clearedRows.size(), tmp);
+        return tmp;
     }
 
 }
