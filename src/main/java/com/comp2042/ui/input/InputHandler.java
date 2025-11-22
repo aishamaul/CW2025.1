@@ -37,18 +37,35 @@ public class InputHandler implements EventHandler<KeyEvent> {
 
     @Override
     public void handle(KeyEvent keyEvent) {
-        if (keyEvent.getCode() == KeyCode.P) {
-            onTogglePause.run();
-            return;
-        }
-        if (keyEvent.getCode() == KeyCode.N) {
-            onNewGame.run();
-            return;
-        }
-        if (isPause.get() || isGameOver.get()) {
+
+        //handle global game state (pause/new game)
+        if (handleGameStateInput(keyEvent)){
             return;
         }
 
+        //stop if game is not running
+        if (isPause.get()|| isGameOver.get()) {
+            return;
+        }
+
+        handleMovementInput(keyEvent);
+    }
+
+    //extracted method: returns true if a state key was pressed
+    private boolean handleGameStateInput(KeyEvent keyEvent) {
+        if (keyEvent.getCode() == KeyCode.P) {
+            onTogglePause.run();
+            return true;
+        }
+        if (keyEvent.getCode() == KeyCode.N) {
+            onNewGame.run();
+            return true;
+        }
+        return false;
+    }
+
+    //extracted method: handles movement logic
+    private void handleMovementInput(KeyEvent keyEvent) {
         if (keyEvent.getCode() == KeyCode.LEFT || keyEvent.getCode() == KeyCode.A) {
             gameView.refreshBrick(dispatcher.moveLeft());
             keyEvent.consume();
