@@ -3,6 +3,8 @@ package com.comp2042.game.core;
 import com.comp2042.model.NextShapeInfo;
 import com.comp2042.game.bricks.Brick;
 
+import java.awt.*;
+
 public class BrickRotator {
 
     private Brick brick;
