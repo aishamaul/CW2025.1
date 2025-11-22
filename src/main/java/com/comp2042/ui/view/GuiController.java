@@ -155,6 +155,10 @@ public class GuiController implements Initializable, GameView {
 
     @FXML
     public void pauseGame(ActionEvent actionEvent) {
+        if(actionEvent==null){
+            pauseButton.setSelected(!pauseButton.isSelected());
+        }
+
         pauseStateManager.togglePause(actionEvent);
         gamePanel.requestFocus();
 
