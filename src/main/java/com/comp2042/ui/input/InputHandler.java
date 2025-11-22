@@ -53,41 +53,47 @@ public class InputHandler implements EventHandler<KeyEvent> {
 
     //extracted method: returns true if a state key was pressed
     private boolean handleGameStateInput(KeyEvent keyEvent) {
-        if (keyEvent.getCode() == KeyCode.P) {
-            onTogglePause.run();
-            return true;
-        }
-        if (keyEvent.getCode() == KeyCode.N) {
-            onNewGame.run();
-            return true;
-        }
-        return false;
+        return switch (keyEvent.getCode()) {
+            case P -> {
+                onTogglePause.run();
+                yield true;
+            }
+            case N -> {
+                onNewGame.run();
+                yield true;
+            }
+            default -> false;
+        };
     }
 
     //extracted method: handles movement logic
     private void handleMovementInput(KeyEvent keyEvent) {
-        if (keyEvent.getCode() == KeyCode.LEFT || keyEvent.getCode() == KeyCode.A) {
-            gameView.refreshBrick(dispatcher.moveLeft());
-            keyEvent.consume();
-        }
-        if (keyEvent.getCode() == KeyCode.RIGHT || keyEvent.getCode() == KeyCode.D) {
-            gameView.refreshBrick(dispatcher.moveRight());
-            keyEvent.consume();
-        }
-        if (keyEvent.getCode() == KeyCode.UP || keyEvent.getCode() == KeyCode.W) {
-            gameView.refreshBrick(dispatcher.rotate());
-            keyEvent.consume();
-        }
-        if (keyEvent.getCode() == KeyCode.DOWN || keyEvent.getCode() == KeyCode.S) {
-            onMoveDown.accept(EventType.DOWN, EventSource.USER);
-            keyEvent.consume();
-        }
+        switch (keyEvent.getCode()) {
+            case LEFT, A -> {
+                gameView.refreshBrick(dispatcher.moveLeft());
+                keyEvent.consume();
+            }
+            case RIGHT, D -> {
+                gameView.refreshBrick(dispatcher.moveRight());
+                keyEvent.consume();
+            }
 
-        if (keyEvent.getCode() == KeyCode.SPACE) {
-            onMoveDown.accept(EventType.DROP, EventSource.USER);
-            keyEvent.consume();
+            case UP, W -> {
+                gameView.refreshBrick(dispatcher.rotate());
+                keyEvent.consume();
+            }
+
+            case DOWN, S -> {
+                onMoveDown.accept(EventType.DOWN, EventSource.USER);
+                keyEvent.consume();
+            }
+
+            case SPACE -> {
+                onMoveDown.accept(EventType.DROP, EventSource.USER);
+                keyEvent.consume();
+            }
+            default -> {
+            }
         }
-
-
     }
 }
