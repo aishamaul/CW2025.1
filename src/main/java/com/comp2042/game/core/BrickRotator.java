@@ -8,6 +8,25 @@ public class BrickRotator {
     private Brick brick;
     private int currentShape = 0;
 
+    public boolean tryRotate(BoardGrid grid, Point currentOffset) {
+        NextShapeInfo nextShapeInfo = getNextShape();
+        int[][] nextMatrix = nextShapeInfo.getShape();
+        int currentX = (int) currentOffset.getX();
+        int currentY = (int) currentOffset.getY();
+
+        int[] kickOffsets = {0, 1, -1, 2, -2};
+
+        for (int kick : kickOffsets) {
+            int newX = currentX + kick;
+            if (!grid.intersects(nextMatrix, newX, currentY)) {
+                setCurrentShape(nextShapeInfo.getPosition());
+                currentOffset.translate(kick,0);
+                return true;
+            }
+        }
+        return false;
+    }
+
     public NextShapeInfo getNextShape() {
         int nextShape = currentShape;
         nextShape = (++nextShape) % brick.getShapeMatrix().size();
