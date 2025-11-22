@@ -60,6 +60,8 @@ public class GuiController implements Initializable, GameView {
 
     private NotificationManager notificationManager;
 
+    private PauseStateManager pauseStateManager;
+
     private final BooleanProperty isPause = new SimpleBooleanProperty();
 
     private final BooleanProperty isGameOver = new SimpleBooleanProperty();
@@ -90,6 +92,8 @@ public class GuiController implements Initializable, GameView {
 
         gameLoopManager = new GameLoopManager(() -> moveDown(EventType.DOWN, EventSource.THREAD));
         gameLoopManager.play();
+
+        this.pauseStateManager = new PauseStateManager(gameLoopManager, pauseButton, isPause);
     }
 
 
@@ -151,23 +155,7 @@ public class GuiController implements Initializable, GameView {
 
     @FXML
     public void pauseGame(ActionEvent actionEvent) {
-        if (pauseButton.isSelected()) {
-            isPause.setValue(Boolean.TRUE);
-            gameLoopManager.pause();
-
-            pauseButton.getStyleClass().remove("pauseButton");
-            if(!pauseButton.getStyleClass().contains("playButton")) {
-                pauseButton.getStyleClass().add("playButton");
-            }
-        }else {
-            isPause.setValue(Boolean.FALSE);
-            gameLoopManager.play();
-
-            pauseButton.getStyleClass().remove("playButton");
-            if(!pauseButton.getStyleClass().contains("pauseButton")) {
-                pauseButton.getStyleClass().add("pauseButton");
-            }
-        }
+        pauseStateManager.togglePause(actionEvent);
         gamePanel.requestFocus();
 
     }
