@@ -1,6 +1,7 @@
 package com.comp2042;
 
 import com.comp2042.game.core.GameController;
+import com.comp2042.game.core.GameInitializer;
 import com.comp2042.ui.view.GuiController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -26,7 +27,7 @@ public class Main extends Application {
         Scene scene = new Scene(root, 300, 510);
         primaryStage.setScene(scene);
         primaryStage.show();
-        new GameController(c);
+        new GameInitializer(c);
     }
 
 

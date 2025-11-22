@@ -10,20 +10,12 @@ import com.comp2042.ui.view.GameView;
 
 public class GameController implements InputEventListener {
 
-    private final Board board = new SimpleBoard(25, 10);
-
+    private final Board board;
     private final GameLifecycleManager lifecycleManager;
 
-    public GameController(GameView view) {
-        ScoreEvaluator scoreEvaluator = new ScoreEvaluator();
-        GameViewAdapter viewAdapter = new GameViewAdapter(view);
-        this.lifecycleManager = new GameLifecycleManager(board, scoreEvaluator, viewAdapter);
-
-        board.createNewBrick();
-
-        viewAdapter.view.setEventListener(this);
-        viewAdapter.initializeView(board.getBoardMatrix(), lifecycleManager.getViewData());
-        viewAdapter.bindScore(board.getScore().scoreProperty());
+    public GameController(Board board, GameLifecycleManager lifecycleManager) {
+        this.board = board;
+        this.lifecycleManager = lifecycleManager;
 
     }
 
